@@ -32,6 +32,15 @@ function App() {
         return;
       }
 
+      // Warn about potentially slow generation
+      if (codeLength > 20) {
+        const confirmed = window.confirm(`Generating ${codeCount} codes with length ${codeLength} may take a while. Continue?`);
+        if (!confirmed) {
+          setIsGenerating(false);
+          return;
+        }
+      }
+
       while (codesSet.size < codeCount) {
         codesSet.add(generateUniqueCode(codeLength));
       }
@@ -89,11 +98,12 @@ function App() {
                 type="number"
                 id="codeCount"
                 min="1"
-                max="10000"
+                max="50000"
                 value={codeCount}
                 onChange={(e) => setCodeCount(parseInt(e.target.value) || 1)}
                 className="form-control"
               />
+              <small className="form-text text-muted">Maximum: 50,000 codes</small>
             </div>
 
             <div className="form-group">
@@ -102,11 +112,12 @@ function App() {
                 type="number"
                 id="codeLength"
                 min="1"
-                max="12"
+                max="50"
                 value={codeLength}
                 onChange={(e) => setCodeLength(parseInt(e.target.value) || 1)}
                 className="form-control"
               />
+              <small className="form-text text-muted">Maximum length: 50 characters</small>
             </div>
 
             <div className="button-group">
